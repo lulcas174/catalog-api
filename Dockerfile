@@ -4,10 +4,11 @@ WORKDIR /app
 
 COPY .mvn/ .mvn
 COPY mvnw pom.xml ./
-COPY src ./src
 
 RUN chmod +x mvnw
-
+RUN ./mvnw dependency:go-offline -B
+COPY src ./src
+RUN ./mvnw test-compile -B
 COPY entrypoint.sh ./
 RUN chmod +x entrypoint.sh
 
