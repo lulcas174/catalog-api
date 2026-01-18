@@ -10,7 +10,7 @@ public class NotZeroValidator implements ConstraintValidator<NotZero, BigDecimal
     @Override
     public boolean isValid(BigDecimal value, ConstraintValidatorContext context) {
         if (value == null) {
-            return true; // @NotNull will handle null validation
+            return true;
         }
         return value.compareTo(BigDecimal.ZERO) != 0;
     }

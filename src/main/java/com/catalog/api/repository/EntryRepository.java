@@ -11,5 +11,8 @@ import java.util.List;
 public interface EntryRepository extends JpaRepository<EntryEntity, Long> {
     List<EntryEntity> findByDateBetween(LocalDate startDate, LocalDate endDate);
 
+    List<EntryEntity> findByDateBetweenAndSubcategory_Category_Id(LocalDate startDate, LocalDate endDate,
+            Long categoryId);
+
     boolean existsBySubcategoryId(Long subcategoryId);
 }
