@@ -2,6 +2,9 @@ FROM eclipse-temurin:21-jdk-alpine
 
 WORKDIR /app
 
+# Install bash and netcat for entrypoint.sh and Maven compatibility
+RUN apk add --no-cache bash netcat-openbsd
+
 COPY .mvn/ .mvn
 COPY mvnw pom.xml ./
 

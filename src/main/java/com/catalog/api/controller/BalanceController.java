@@ -4,12 +4,14 @@ import com.catalog.api.dto.BalanceDTO;
 import com.catalog.api.service.BalanceService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 
+@Tag(name = "Balanço")
 @RestController
-@RequestMapping("/balanço")
+@RequestMapping("/balanco")
 public class BalanceController {
 
     private final BalanceService balanceService;

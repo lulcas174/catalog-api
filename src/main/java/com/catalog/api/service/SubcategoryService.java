@@ -3,6 +3,8 @@ package com.catalog.api.service;
 import com.catalog.api.domain.CategoryEntity;
 import com.catalog.api.domain.SubcategoryEntity;
 import com.catalog.api.dto.SubcategoryDTO;
+import com.catalog.api.exception.BusinessException;
+import com.catalog.api.exception.ResourceNotFoundException;
 import com.catalog.api.repository.CategoryRepository;
 import com.catalog.api.repository.EntryRepository;
 import com.catalog.api.repository.SubcategoryRepository;
@@ -38,17 +40,17 @@ public class SubcategoryService {
 
     public SubcategoryDTO findById(Long id) {
         SubcategoryEntity subcategory = subcategoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Subcategoria não encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Subcategoria não encontrada"));
         return new SubcategoryDTO(subcategory);
     }
 
     @Transactional
     public SubcategoryDTO create(SubcategoryDTO subcategoryDTO) {
         CategoryEntity category = categoryRepository.findById(subcategoryDTO.getCategoryId())
-                .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada"));
 
         if (subcategoryRepository.existsByCategoryIdAndName(subcategoryDTO.getCategoryId(), subcategoryDTO.getName())) {
-            throw new RuntimeException("Já existe uma subcategoria com este nome nesta categoria");
+            throw new BusinessException("Já existe uma subcategoria com este nome nesta categoria");
         }
 
         SubcategoryEntity subcategory = new SubcategoryEntity();
@@ -62,16 +64,16 @@ public class SubcategoryService {
     @Transactional
     public SubcategoryDTO update(Long id, SubcategoryDTO subcategoryDTO) {
         SubcategoryEntity subcategory = subcategoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Subcategoria não encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Subcategoria não encontrada"));
 
         CategoryEntity category = categoryRepository.findById(subcategoryDTO.getCategoryId())
-                .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada"));
 
         if (!subcategory.getName().equals(subcategoryDTO.getName()) ||
                 !subcategory.getCategory().getId().equals(subcategoryDTO.getCategoryId())) {
             if (subcategoryRepository.existsByCategoryIdAndName(subcategoryDTO.getCategoryId(),
                     subcategoryDTO.getName())) {
-                throw new RuntimeException("Já existe uma subcategoria com este nome nesta categoria");
+                throw new BusinessException("Já existe uma subcategoria com este nome nesta categoria");
             }
         }
 
@@ -84,10 +86,10 @@ public class SubcategoryService {
     @Transactional
     public void delete(Long id) {
         if (!subcategoryRepository.existsById(id)) {
-            throw new RuntimeException("Subcategoria não encontrada");
+            throw new ResourceNotFoundException("Subcategoria não encontrada");
         }
         if (entryRepository.existsBySubcategoryId(id)) {
-            throw new RuntimeException("Não é possível excluir subcategoria com lançamentos associados");
+            throw new BusinessException("Não é possível excluir subcategoria com lançamentos associados");
         }
         subcategoryRepository.deleteById(id);
     }

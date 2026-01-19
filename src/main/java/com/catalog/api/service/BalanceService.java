@@ -4,6 +4,7 @@ import com.catalog.api.domain.CategoryEntity;
 import com.catalog.api.domain.EntryEntity;
 import com.catalog.api.dto.BalanceDTO;
 import com.catalog.api.dto.CategorySummaryDTO;
+import com.catalog.api.exception.ResourceNotFoundException;
 import com.catalog.api.repository.CategoryRepository;
 import com.catalog.api.repository.EntryRepository;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,7 @@ public class BalanceService {
 
         if (idCategoria != null) {
             CategoryEntity category = categoryRepository.findById(idCategoria)
-                    .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
+                    .orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada"));
 
             entries = entryRepository.findByDateBetweenAndSubcategory_Category_Id(dataInicio, dataFim, idCategoria);
 

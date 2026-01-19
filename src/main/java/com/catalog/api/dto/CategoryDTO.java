@@ -3,6 +3,7 @@ package com.catalog.api.dto;
 import com.catalog.api.domain.CategoryEntity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CategoryDTO {
 
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     @JsonProperty("id_categoria")
     private Long id;
 

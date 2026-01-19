@@ -2,6 +2,8 @@ package com.catalog.api.service;
 
 import com.catalog.api.domain.CategoryEntity;
 import com.catalog.api.dto.CategoryDTO;
+import com.catalog.api.exception.BusinessException;
+import com.catalog.api.exception.ResourceNotFoundException;
 import com.catalog.api.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,14 +32,14 @@ public class CategoryService {
 
     public CategoryDTO findById(Long id) {
         CategoryEntity category = categoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada"));
         return new CategoryDTO(category);
     }
 
     @Transactional
     public CategoryDTO create(CategoryDTO categoryDTO) {
         if (categoryRepository.existsByName(categoryDTO.getName())) {
-            throw new RuntimeException("Já existe uma categoria com este nome");
+            throw new BusinessException("Já existe uma categoria com este nome");
         }
         CategoryEntity category = categoryDTO.toEntity();
         category = categoryRepository.save(category);
@@ -47,11 +49,11 @@ public class CategoryService {
     @Transactional
     public CategoryDTO update(Long id, CategoryDTO categoryDTO) {
         CategoryEntity category = categoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada"));
 
         if (!category.getName().equals(categoryDTO.getName())
                 && categoryRepository.existsByName(categoryDTO.getName())) {
-            throw new RuntimeException("Já existe uma categoria com este nome");
+            throw new BusinessException("Já existe uma categoria com este nome");
         }
 
         category.setName(categoryDTO.getName());
@@ -62,7 +64,7 @@ public class CategoryService {
     @Transactional
     public void delete(Long id) {
         if (!categoryRepository.existsById(id)) {
-            throw new RuntimeException("Categoria não encontrada");
+            throw new ResourceNotFoundException("Categoria não encontrada");
         }
         categoryRepository.deleteById(id);
     }

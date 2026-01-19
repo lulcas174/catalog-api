@@ -1,7 +1,15 @@
 #!/bin/sh
 
 echo "****************************************************"
-echo "WAITING FOR DATABASE..."
+cat <<'EOF'
+        _.---._    /\
+      ./'       "--`\//
+    ./              o \           .-----.
+   /./\  )______   \__ \         ( PostgreSQL )
+  ./  / /\ \   | \ \  \ \        '-----'
+     / /  \ \  | |\ \  \7
+      "     "    "  "      Waiting for DB...
+EOF
 echo "****************************************************"
 
 while ! nc -z db 5432; do
@@ -20,12 +28,24 @@ TEST_EXIT_CODE=$?
 
 if [ $TEST_EXIT_CODE -eq 0 ]; then
     echo "****************************************************"
-    echo "TESTS PASSED! STARTING APPLICATION..."
+    cat <<'EOF'
+        (•_•)
+        ( •_•)>⌐■-■
+        (⌐■_■)
+
+      ALL TESTS PASSED ✔
+EOF
     echo "****************************************************"
     ./mvnw -q spring-boot:run
 else
     echo "****************************************************"
-    echo "TESTS FAILED! EXITING..."
+    cat <<'EOF'
+        (╯°□°）╯︵ ┻━┻
+
+      TESTS FAILED ✖
+      Who wrote this code?
+      (probably you)
+EOF
     echo "****************************************************"
     exit 1
 fi

@@ -5,6 +5,7 @@ import com.catalog.api.validation.NotZero;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +16,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class EntryDTO {
 
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     @JsonProperty("id_lancamento")
     private Long id;
 

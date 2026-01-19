@@ -3,6 +3,7 @@ package com.catalog.api.service;
 import com.catalog.api.domain.EntryEntity;
 import com.catalog.api.domain.SubcategoryEntity;
 import com.catalog.api.dto.EntryDTO;
+import com.catalog.api.exception.ResourceNotFoundException;
 import com.catalog.api.repository.EntryRepository;
 import com.catalog.api.repository.SubcategoryRepository;
 import org.springframework.stereotype.Service;
@@ -35,14 +36,14 @@ public class EntryService {
 
     public EntryDTO findById(Long id) {
         EntryEntity entry = entryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Lançamento não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Lançamento não encontrado"));
         return new EntryDTO(entry);
     }
 
     @Transactional
     public EntryDTO create(EntryDTO entryDTO) {
         SubcategoryEntity subcategory = subcategoryRepository.findById(entryDTO.getSubcategoryId())
-                .orElseThrow(() -> new RuntimeException("Subcategoria não encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Subcategoria não encontrada"));
 
         EntryEntity entry = new EntryEntity();
         entry.setValue(entryDTO.getValue());
@@ -57,10 +58,10 @@ public class EntryService {
     @Transactional
     public EntryDTO update(Long id, EntryDTO entryDTO) {
         EntryEntity entry = entryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Lançamento não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Lançamento não encontrado"));
 
         SubcategoryEntity subcategory = subcategoryRepository.findById(entryDTO.getSubcategoryId())
-                .orElseThrow(() -> new RuntimeException("Subcategoria não encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Subcategoria não encontrada"));
 
         entry.setValue(entryDTO.getValue());
         entry.setDate(entryDTO.getDate() != null ? entryDTO.getDate() : entry.getDate());
@@ -74,7 +75,7 @@ public class EntryService {
     @Transactional
     public void delete(Long id) {
         if (!entryRepository.existsById(id)) {
-            throw new RuntimeException("Lançamento não encontrado");
+            throw new ResourceNotFoundException("Lançamento não encontrado");
         }
         entryRepository.deleteById(id);
     }
